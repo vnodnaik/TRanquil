@@ -1,28 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { ArrowRight, Users, Briefcase, Building2, TrendingUp, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const Home = () => {
-  const [stats, setStats] = useState(null);
   const [industries, setIndustries] = useState([]);
 
   useEffect(() => {
-    fetchStats();
     fetchIndustries();
   }, []);
-
-  const fetchStats = async () => {
-    try {
-      const response = await axios.get(`${API}/stats`);
-      setStats(response.data);
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-    }
-  };
 
   const fetchIndustries = async () => {
     try {
@@ -32,6 +21,21 @@ const Home = () => {
       console.error('Error fetching industries:', error);
     }
   };
+
+  const allIndustries = [
+    { name: 'Technology', icon: 'laptop' },
+    { name: 'Healthcare', icon: 'heart-pulse' },
+    { name: 'Finance', icon: 'building-columns' },
+    { name: 'Manufacturing', icon: 'industry' },
+    { name: 'Retail', icon: 'shopping-cart' },
+    { name: 'Education', icon: 'graduation-cap' },
+    { name: 'Hospitality', icon: 'utensils' },
+    { name: 'Construction', icon: 'hard-hat' },
+    { name: 'Transportation', icon: 'truck' },
+    { name: 'Real Estate', icon: 'building' },
+    { name: 'Legal', icon: 'scale-balanced' },
+    { name: 'Media', icon: 'film' }
+  ];
 
   return (
     <div className="home-page" data-testid="home-page">
@@ -71,40 +75,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      {stats && (
-        <section className="py-12 bg-white" data-testid="stats-section">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="text-4xl font-bold" style={{ color: '#FF6B35' }} data-testid="stat-active-jobs">
-                  {stats.active_jobs}+
-                </div>
-                <div className="text-gray-600 mt-2">Active Jobs</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold" style={{ color: '#FF6B35' }} data-testid="stat-companies">
-                  {stats.companies_hiring}+
-                </div>
-                <div className="text-gray-600 mt-2">Companies Hiring</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold" style={{ color: '#FF6B35' }} data-testid="stat-applications">
-                  {stats.total_applications}+
-                </div>
-                <div className="text-gray-600 mt-2">Applications</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold" style={{ color: '#FF6B35' }} data-testid="stat-placements">
-                  500+
-                </div>
-                <div className="text-gray-600 mt-2">Successful Placements</div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* Our Services Section */}
       <section className="section-padding bg-gray-50" data-testid="services-section">
         <div className="container mx-auto px-4">
@@ -117,13 +87,13 @@ const Home = () => {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="card p-8" data-testid="service-recruitment">
               <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#FF6B35' }}>
-                <Users className="text-white" size={32} />
+                <i className="fas fa-users text-white text-3xl"></i>
               </div>
               <h3 className="text-2xl font-semibold mb-3">Recruitment</h3>
               <p className="text-gray-600 mb-4">
                 Find the perfect candidates for permanent positions across all industries. Our expert recruiters understand your needs and deliver quality talent.
               </p>
-              <ul className="space-y-2">
+              <ul className="space-y-2 mb-6">
                 <li className="flex items-center gap-2 text-gray-700">
                   <CheckCircle2 size={18} style={{ color: '#FF6B35' }} />
                   Executive Search
@@ -137,16 +107,21 @@ const Home = () => {
                   Volume Recruitment
                 </li>
               </ul>
+              <Link to="/recruitment" data-testid="recruitment-learn-more">
+                <button className="btn-primary flex items-center gap-2">
+                  Learn More <ArrowRight size={18} />
+                </button>
+              </Link>
             </div>
             <div className="card p-8" data-testid="service-staffing">
               <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#FF6B35' }}>
-                <Briefcase className="text-white" size={32} />
+                <i className="fas fa-briefcase text-white text-3xl"></i>
               </div>
               <h3 className="text-2xl font-semibold mb-3">Staffing</h3>
               <p className="text-gray-600 mb-4">
                 Flexible staffing solutions for temporary, contract, and project-based needs. Scale your workforce efficiently with our reliable temp staffing.
               </p>
-              <ul className="space-y-2">
+              <ul className="space-y-2 mb-6">
                 <li className="flex items-center gap-2 text-gray-700">
                   <CheckCircle2 size={18} style={{ color: '#FF6B35' }} />
                   Temporary Staffing
@@ -160,6 +135,11 @@ const Home = () => {
                   Project-Based Staffing
                 </li>
               </ul>
+              <Link to="/staffing" data-testid="staffing-learn-more">
+                <button className="btn-primary flex items-center gap-2">
+                  Learn More <ArrowRight size={18} />
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -174,10 +154,17 @@ const Home = () => {
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
             Simple, efficient, and transparent recruitment process
           </p>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center" data-testid="step-1">
-              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#FF6B35' }}>
-                <span className="text-3xl font-bold text-white">1</span>
+              <div className="mb-6 flex justify-center">
+                <img
+                  src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=300&h=300&fit=crop"
+                  alt="Share Your Needs"
+                  className="w-48 h-48 object-cover rounded-lg shadow-lg"
+                />
+              </div>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#FF6B35' }}>
+                <span className="text-2xl font-bold text-white">1</span>
               </div>
               <h3 className="text-xl font-semibold mb-3">Share Your Needs</h3>
               <p className="text-gray-600">
@@ -185,8 +172,15 @@ const Home = () => {
               </p>
             </div>
             <div className="text-center" data-testid="step-2">
-              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#FF6B35' }}>
-                <span className="text-3xl font-bold text-white">2</span>
+              <div className="mb-6 flex justify-center">
+                <img
+                  src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=300&h=300&fit=crop"
+                  alt="We Find Matches"
+                  className="w-48 h-48 object-cover rounded-lg shadow-lg"
+                />
+              </div>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#FF6B35' }}>
+                <span className="text-2xl font-bold text-white">2</span>
               </div>
               <h3 className="text-xl font-semibold mb-3">We Find Matches</h3>
               <p className="text-gray-600">
@@ -194,8 +188,31 @@ const Home = () => {
               </p>
             </div>
             <div className="text-center" data-testid="step-3">
-              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#FF6B35' }}>
-                <span className="text-3xl font-bold text-white">3</span>
+              <div className="mb-6 flex justify-center">
+                <img
+                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&h=300&fit=crop"
+                  alt="Interview Process"
+                  className="w-48 h-48 object-cover rounded-lg shadow-lg"
+                />
+              </div>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#FF6B35' }}>
+                <span className="text-2xl font-bold text-white">3</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Interview & Select</h3>
+              <p className="text-gray-600">
+                We coordinate interviews and help you evaluate candidates to make the best selection.
+              </p>
+            </div>
+            <div className="text-center" data-testid="step-4">
+              <div className="mb-6 flex justify-center">
+                <img
+                  src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=300&h=300&fit=crop"
+                  alt="Start Working"
+                  className="w-48 h-48 object-cover rounded-lg shadow-lg"
+                />
+              </div>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#FF6B35' }}>
+                <span className="text-2xl font-bold text-white">4</span>
               </div>
               <h3 className="text-xl font-semibold mb-3">Start Working</h3>
               <p className="text-gray-600">
@@ -215,8 +232,8 @@ const Home = () => {
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
             Specialized recruitment across diverse sectors
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {industries.map((industry, index) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {allIndustries.map((industry, index) => (
               <div key={index} className="card p-6 text-center" data-testid={`industry-${industry.name.toLowerCase()}`}>
                 <div className="text-4xl mb-3" style={{ color: '#FF6B35' }}>
                   <i className={`fas fa-${industry.icon}`}></i>
@@ -248,7 +265,7 @@ const Home = () => {
                 <div className="flex gap-4" data-testid="reason-1">
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FFF5F2' }}>
-                      <TrendingUp style={{ color: '#FF6B35' }} size={24} />
+                      <i className="fas fa-chart-line" style={{ color: '#FF6B35' }}></i>
                     </div>
                   </div>
                   <div>
@@ -261,7 +278,7 @@ const Home = () => {
                 <div className="flex gap-4" data-testid="reason-2">
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FFF5F2' }}>
-                      <Users style={{ color: '#FF6B35' }} size={24} />
+                      <i className="fas fa-users" style={{ color: '#FF6B35' }}></i>
                     </div>
                   </div>
                   <div>
@@ -274,7 +291,7 @@ const Home = () => {
                 <div className="flex gap-4" data-testid="reason-3">
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FFF5F2' }}>
-                      <Building2 style={{ color: '#FF6B35' }} size={24} />
+                      <i className="fas fa-building" style={{ color: '#FF6B35' }}></i>
                     </div>
                   </div>
                   <div>
