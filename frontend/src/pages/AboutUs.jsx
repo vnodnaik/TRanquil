@@ -78,20 +78,30 @@ const AboutUs = () => {
       {/* Our Story Section */}
       <section className="section-padding" data-testid="our-story-section">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold mb-6 text-center" data-testid="story-title">
-              Our Story
-            </h2>
-            <div className="space-y-6 text-gray-700 text-lg">
-              <p>
-                Tranquil Peeplz was founded in 2009 with a simple yet powerful vision: to revolutionize the recruitment industry by putting people first. What started as a small team of passionate recruiters has grown into a leading staffing solutions provider.
-              </p>
-              <p>
-                Over the years, we've successfully placed thousands of candidates in roles where they thrive, and helped countless companies build exceptional teams. Our success stems from our unwavering commitment to understanding both our clients' needs and our candidates' aspirations.
-              </p>
-              <p>
-                Today, we serve clients across multiple industries, from startups to Fortune 500 companies, always maintaining the personal touch and dedication that defined us from day one.
-              </p>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl font-bold mb-6" data-testid="story-title">
+                Our Story
+              </h2>
+              <div className="space-y-6 text-gray-700 text-lg">
+                <p>
+                  Tranquil Peeplz was founded in 2009 with a simple yet powerful vision: to revolutionize the recruitment industry by putting people first. What started as a small team of passionate recruiters has grown into a leading staffing solutions provider.
+                </p>
+                <p>
+                  Over the years, we've successfully placed thousands of candidates in roles where they thrive, and helped countless companies build exceptional teams. Our success stems from our unwavering commitment to understanding both our clients' needs and our candidates' aspirations.
+                </p>
+                <p>
+                  Today, we serve clients across multiple industries, from startups to Fortune 500 companies, always maintaining the personal touch and dedication that defined us from day one.
+                </p>
+              </div>
+            </div>
+            <div>
+              <img
+                src="https://images.unsplash.com/photo-1606836591695-4d58a73eba1e"
+                alt="Our Story"
+                className="rounded-lg shadow-xl"
+                data-testid="story-image"
+              />
             </div>
           </div>
         </div>
