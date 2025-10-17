@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Target, BookOpen, TrendingUp, Users, FileText, Briefcase } from 'lucide-react';
+import { Target, BookOpen, TrendingUp, Users, FileText, Briefcase, Upload } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -17,10 +17,19 @@ const ForEmployee = () => {
     skills: '',
     cover_letter: ''
   });
+  const [resumeFile, setResumeFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setResumeForm({ ...resumeForm, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setResumeFile(file);
+      toast.success(`Resume "${file.name}" selected`);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -47,6 +56,7 @@ const ForEmployee = () => {
         skills: '',
         cover_letter: ''
       });
+      setResumeFile(null);
     } catch (error) {
       console.error('Error submitting resume:', error);
       toast.error('Failed to submit resume. Please try again.');
@@ -167,46 +177,218 @@ const ForEmployee = () => {
         </div>
       </section>
 
-      {/* How We Help Section */}
-      <section className="section-padding bg-gray-50" data-testid="how-we-help-section">
+      {/* Submit Resume and How We Help - Side by Side */}
+      <section className="section-padding bg-gray-50" data-testid="resume-and-help-section">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <img
-                src="https://images.unsplash.com/photo-1758691737387-a89bb8adf768"
-                alt="Professional team"
-                className="rounded-lg shadow-xl"
-                data-testid="help-image"
-              />
+          <h2 className="text-4xl font-bold text-center mb-12">Get Started With Us</h2>
+          <div className="grid lg:grid-cols-2 gap-12">
+            {/* Submit Resume Form */}
+            <div data-testid="submit-resume-section">
+              <div className="card p-8">
+                <h3 className="text-2xl font-bold mb-6" data-testid="submit-resume-title">
+                  Submit Your Resume
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Let us help you find your dream job. Submit your resume and our team will match you with the perfect opportunities.
+                </p>
+                <form onSubmit={handleSubmit} data-testid="resume-form">
+                  <div className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2" htmlFor="name">
+                          Full Name
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          value={resumeForm.name}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          data-testid="resume-name-input"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2" htmlFor="email">
+                          Email Address
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={resumeForm.email}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          data-testid="resume-email-input"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2" htmlFor="phone">
+                          Phone Number
+                        </label>
+                        <input
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          value={resumeForm.phone}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          data-testid="resume-phone-input"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2" htmlFor="position">
+                          Desired Position
+                        </label>
+                        <input
+                          type="text"
+                          id="position"
+                          name="position"
+                          value={resumeForm.position}
+                          onChange={handleChange}
+                          placeholder="e.g., Software Engineer"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          data-testid="resume-position-input"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2" htmlFor="experience">
+                        Years of Experience
+                      </label>
+                      <input
+                        type="text"
+                        id="experience"
+                        name="experience"
+                        value={resumeForm.experience}
+                        onChange={handleChange}
+                        placeholder="e.g., 5 years"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        data-testid="resume-experience-input"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2" htmlFor="skills">
+                        Key Skills
+                      </label>
+                      <textarea
+                        id="skills"
+                        name="skills"
+                        value={resumeForm.skills}
+                        onChange={handleChange}
+                        rows={3}
+                        placeholder="e.g., JavaScript, React, Node.js, Python"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        data-testid="resume-skills-input"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2" htmlFor="resume-file">
+                        Attach Resume
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="file"
+                          id="resume-file"
+                          onChange={handleFileChange}
+                          accept=".pdf,.doc,.docx"
+                          className="hidden"
+                          data-testid="input-resume-file"
+                        />
+                        <label
+                          htmlFor="resume-file"
+                          className="flex items-center justify-center gap-2 w-full px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-orange-500 transition-colors"
+                          data-testid="resume-file-upload-label"
+                        >
+                          <Upload size={20} style={{ color: '#FF6B35' }} />
+                          <span className="text-sm text-gray-600">
+                            {resumeFile ? resumeFile.name : 'Click to upload resume'}
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="btn-primary w-full"
+                      data-testid="submit-resume-btn"
+                    >
+                      {isSubmitting ? 'Submitting...' : 'Submit Resume'}
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
-            <div>
-              <h2 className="text-4xl font-bold mb-6" data-testid="how-we-help-title">
-                How We Help You Succeed
-              </h2>
-              <div className="space-y-6">
-                <div data-testid="help-step-1">
-                  <h3 className="text-xl font-semibold mb-2">1. Understand Your Goals</h3>
-                  <p className="text-gray-600">
-                    We start by understanding your career aspirations, skills, and preferences to find the perfect match.
-                  </p>
+
+            {/* How We Help You Succeed */}
+            <div data-testid="how-we-help-section">
+              <div className="card p-8 h-full">
+                <h3 className="text-2xl font-bold mb-6" data-testid="how-we-help-title">
+                  How We Help You Succeed
+                </h3>
+                <div className="space-y-6">
+                  <div data-testid="help-step-1">
+                    <div className="flex gap-4 mb-4">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: '#FF6B35' }}>
+                        1
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-semibold mb-2">Understand Your Goals</h4>
+                        <p className="text-gray-600">
+                          We start by understanding your career aspirations, skills, and preferences to find the perfect match.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div data-testid="help-step-2">
+                    <div className="flex gap-4 mb-4">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: '#FF6B35' }}>
+                        2
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-semibold mb-2">Match You with Opportunities</h4>
+                        <p className="text-gray-600">
+                          Our recruiters actively search for positions that align with your profile and career goals.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div data-testid="help-step-3">
+                    <div className="flex gap-4 mb-4">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: '#FF6B35' }}>
+                        3
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-semibold mb-2">Prepare You for Success</h4>
+                        <p className="text-gray-600">
+                          We provide interview coaching, resume tips, and insights about potential employers.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div data-testid="help-step-4">
+                    <div className="flex gap-4">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: '#FF6B35' }}>
+                        4
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-semibold mb-2">Support Throughout the Process</h4>
+                        <p className="text-gray-600">
+                          From application to offer negotiation and onboarding, we're with you every step.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div data-testid="help-step-2">
-                  <h3 className="text-xl font-semibold mb-2">2. Match You with Opportunities</h3>
-                  <p className="text-gray-600">
-                    Our recruiters actively search for positions that align with your profile and career goals.
-                  </p>
-                </div>
-                <div data-testid="help-step-3">
-                  <h3 className="text-xl font-semibold mb-2">3. Prepare You for Success</h3>
-                  <p className="text-gray-600">
-                    We provide interview coaching, resume tips, and insights about potential employers.
-                  </p>
-                </div>
-                <div data-testid="help-step-4">
-                  <h3 className="text-xl font-semibold mb-2">4. Support Throughout the Process</h3>
-                  <p className="text-gray-600">
-                    From application to offer negotiation and onboarding, we're with you every step.
-                  </p>
+                <div className="mt-8 pt-6 border-t">
+                  <img
+                    src="https://images.unsplash.com/photo-1758691737387-a89bb8adf768"
+                    alt="Professional team"
+                    className="rounded-lg shadow-lg"
+                    data-testid="help-image"
+                  />
                 </div>
               </div>
             </div>
@@ -214,148 +396,8 @@ const ForEmployee = () => {
         </div>
       </section>
 
-      {/* Submit Resume Section */}
-      <section className="section-padding" data-testid="submit-resume-section">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-4" data-testid="submit-resume-title">
-              Submit Your Resume
-            </h2>
-            <p className="text-center text-gray-600 mb-8">
-              Let us help you find your dream job. Submit your resume and our team will match you with the perfect opportunities.
-            </p>
-            <div className="card p-8">
-              <form onSubmit={handleSubmit} data-testid="resume-form">
-                <div className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium mb-2" htmlFor="name">
-                        Full Name *
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={resumeForm.name}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        data-testid="resume-name-input"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2" htmlFor="email">
-                        Email Address *
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={resumeForm.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        data-testid="resume-email-input"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium mb-2" htmlFor="phone">
-                        Phone Number *
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={resumeForm.phone}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        data-testid="resume-phone-input"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2" htmlFor="position">
-                        Desired Position *
-                      </label>
-                      <input
-                        type="text"
-                        id="position"
-                        name="position"
-                        value={resumeForm.position}
-                        onChange={handleChange}
-                        required
-                        placeholder="e.g., Software Engineer"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        data-testid="resume-position-input"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2" htmlFor="experience">
-                      Years of Experience *
-                    </label>
-                    <input
-                      type="text"
-                      id="experience"
-                      name="experience"
-                      value={resumeForm.experience}
-                      onChange={handleChange}
-                      required
-                      placeholder="e.g., 5 years"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      data-testid="resume-experience-input"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2" htmlFor="skills">
-                      Key Skills *
-                    </label>
-                    <textarea
-                      id="skills"
-                      name="skills"
-                      value={resumeForm.skills}
-                      onChange={handleChange}
-                      required
-                      rows={3}
-                      placeholder="e.g., JavaScript, React, Node.js, Python"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      data-testid="resume-skills-input"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2" htmlFor="cover_letter">
-                      Cover Letter / Additional Information
-                    </label>
-                    <textarea
-                      id="cover_letter"
-                      name="cover_letter"
-                      value={resumeForm.cover_letter}
-                      onChange={handleChange}
-                      rows={6}
-                      placeholder="Tell us about yourself and what you're looking for..."
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      data-testid="resume-cover-letter-input"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="btn-primary w-full"
-                    data-testid="submit-resume-btn"
-                  >
-                    {isSubmitting ? 'Submitting...' : 'Submit Resume'}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Career Tips Section */}
-      <section className="section-padding bg-gray-50" data-testid="career-tips-section">
+      <section className="section-padding" data-testid="career-tips-section">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4" data-testid="tips-title">
             Career Success Tips
@@ -384,7 +426,7 @@ const ForEmployee = () => {
       </section>
 
       {/* Job Types Section */}
-      <section className="section-padding" data-testid="job-types-section">
+      <section className="section-padding bg-gray-50" data-testid="job-types-section">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12" data-testid="job-types-title">
             Types of Opportunities We Offer
