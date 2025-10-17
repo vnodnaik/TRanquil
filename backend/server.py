@@ -334,6 +334,57 @@ async def update_profile(profile_data: ProfileUpdate, current_user: User = Depen
         profile=updated_user.get("profile")
     )
 
+@api_router.post("/auth/forgot-password")
+async def forgot_password(request: ForgotPasswordRequest):
+    user = await db.users.find_one({"email": request.email})
+    
+    if not user:
+        # Don't reveal if email exists or not (security best practice)
+        return {"message": "If the email exists, a password reset link has been sent."}
+    
+    # Generate reset token
+    reset_token = generate_verification_token()
+    reset_expiry = datetime.now(timezone.utc) + timedelta(hours=1)
+    
+    # Save reset token to database
+    await db.users.update_one(
+        {"id": user["id"]},
+        {"$set": {
+            "reset_token": reset_token,
+            "reset_token_expiry": reset_expiry.isoformat()
+        }}
+    )
+    
+    # Send password reset email
+    reset_link = f"https://tanquil-recruit.preview.emergentagent.com/reset-password?token={reset_token}"
+    send_password_reset_email(user["email"], reset_link, user["name"])
+    
+    return {"message": "If the email exists, a password reset link has been sent."}
+
+@api_router.post("/auth/reset-password")
+async def reset_password(request: ResetPasswordRequest):
+    user = await db.users.find_one({"reset_token": request.token})
+    
+    if not user:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset token")
+    
+    # Check if token is expired
+    expiry = datetime.fromisoformat(user.get("reset_token_expiry", ""))
+    if datetime.now(timezone.utc) > expiry:
+        raise HTTPException(status_code=400, detail="Reset token has expired")
+    
+    # Update password
+    new_hash = get_password_hash(request.new_password)
+    await db.users.update_one(
+        {"id": user["id"]},
+        {
+            "$set": {"password_hash": new_hash},
+            "$unset": {"reset_token": "", "reset_token_expiry": ""}
+        }
+    )
+    
+    return {"message": "Password has been reset successfully"}
+
 # Job Routes
 @api_router.get("/jobs", response_model=List[Job])
 async def get_jobs(
