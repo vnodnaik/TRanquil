@@ -113,7 +113,7 @@ class Job(BaseModel):
     requirements: List[str]
     posted_date: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     is_active: bool = True
-    employer_id: str
+    employer_id: Optional[str] = None  # Made optional for backward compatibility
 
 class JobCreate(BaseModel):
     title: str
