@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
 import { Briefcase, Users, FileText, LogOut, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
