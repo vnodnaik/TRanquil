@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, Users, Clock, Award, CheckCircle2, TrendingUp, Briefcase } from 'lucide-react';
+import { Building2, Users, Clock, Award, CheckCircle2, TrendingUp, Briefcase, Upload } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -18,10 +18,19 @@ const ForEmployer = () => {
     company: '',
     requirements: ''
   });
+  const [jobDescFile, setJobDescFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setJobDescFile(file);
+      toast.success(`File "${file.name}" selected`);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -35,7 +44,7 @@ const ForEmployer = () => {
 
       await axios.post(`${API}/jobs`, {
         ...formData,
-        requirements: requirementsArray
+        requirements: requirementsArray.length > 0 ? requirementsArray : ['No specific requirements listed']
       });
 
       toast.success('Job posted successfully!');
@@ -49,6 +58,7 @@ const ForEmployer = () => {
         company: '',
         requirements: ''
       });
+      setJobDescFile(null);
     } catch (error) {
       console.error('Error posting job:', error);
       toast.error('Failed to post job. Please try again.');
@@ -262,7 +272,7 @@ const ForEmployer = () => {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium mb-2" htmlFor="company">
-                        Company Name *
+                        Company Name
                       </label>
                       <input
                         type="text"
@@ -270,14 +280,13 @@ const ForEmployer = () => {
                         name="company"
                         value={formData.company}
                         onChange={handleChange}
-                        required
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                         data-testid="input-company"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2" htmlFor="title">
-                        Job Title *
+                        Job Title
                       </label>
                       <input
                         type="text"
@@ -285,7 +294,6 @@ const ForEmployer = () => {
                         name="title"
                         value={formData.title}
                         onChange={handleChange}
-                        required
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                         data-testid="input-title"
                       />
@@ -293,7 +301,7 @@ const ForEmployer = () => {
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-2" htmlFor="location">
-                          Location *
+                          Location
                         </label>
                         <input
                           type="text"
@@ -301,21 +309,19 @@ const ForEmployer = () => {
                           name="location"
                           value={formData.location}
                           onChange={handleChange}
-                          required
                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                           data-testid="input-location"
                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-2" htmlFor="job_type">
-                          Job Type *
+                          Job Type
                         </label>
                         <select
                           id="job_type"
                           name="job_type"
                           value={formData.job_type}
                           onChange={handleChange}
-                          required
                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                           data-testid="select-job-type"
                         >
@@ -329,7 +335,7 @@ const ForEmployer = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2" htmlFor="category">
-                        Category *
+                        Category
                       </label>
                       <input
                         type="text"
@@ -337,7 +343,6 @@ const ForEmployer = () => {
                         name="category"
                         value={formData.category}
                         onChange={handleChange}
-                        required
                         placeholder="e.g., Engineering"
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                         data-testid="input-category"
@@ -345,34 +350,42 @@ const ForEmployer = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2" htmlFor="description">
-                        Job Description *
+                        Job Description
                       </label>
                       <textarea
                         id="description"
                         name="description"
                         value={formData.description}
                         onChange={handleChange}
-                        required
                         rows={4}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                         data-testid="textarea-description"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2" htmlFor="requirements">
-                        Requirements (one per line) *
+                      <label className="block text-sm font-medium mb-2" htmlFor="job-desc-file">
+                        Attach Job Description (Optional)
                       </label>
-                      <textarea
-                        id="requirements"
-                        name="requirements"
-                        value={formData.requirements}
-                        onChange={handleChange}
-                        required
-                        rows={4}
-                        placeholder="5+ years of experience&#10;Bachelor's degree&#10;Strong communication skills"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        data-testid="textarea-requirements"
-                      />
+                      <div className="relative">
+                        <input
+                          type="file"
+                          id="job-desc-file"
+                          onChange={handleFileChange}
+                          accept=".pdf,.doc,.docx,.txt"
+                          className="hidden"
+                          data-testid="input-job-file"
+                        />
+                        <label
+                          htmlFor="job-desc-file"
+                          className="flex items-center justify-center gap-2 w-full px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-orange-500 transition-colors"
+                          data-testid="file-upload-label"
+                        >
+                          <Upload size={20} style={{ color: '#FF6B35' }} />
+                          <span className="text-sm text-gray-600">
+                            {jobDescFile ? jobDescFile.name : 'Click to upload file'}
+                          </span>
+                        </label>
+                      </div>
                     </div>
                     <button
                       type="submit"
