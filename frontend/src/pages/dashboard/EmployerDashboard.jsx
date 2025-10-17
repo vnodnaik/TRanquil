@@ -43,16 +43,6 @@ const EmployerDashboard = () => {
     }
   };
 
-  const handleSwitchRole = async () => {
-    try {
-      await switchRole();
-      toast.success('Switched to Job Seeker mode');
-      window.location.href = '/jobseeker-dashboard';
-    } catch (error) {
-      toast.error('Failed to switch role');
-    }
-  };
-
   const handleLogout = () => {
     logout();
     toast.success('Logged out successfully');
@@ -72,14 +62,6 @@ const EmployerDashboard = () => {
               <p className="text-gray-600">Welcome back, {user?.name}!</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={handleSwitchRole}
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                data-testid="switch-role-btn"
-              >
-                <RefreshCw size={18} />
-                Switch to Job Seeker
-              </button>
               <button
                 onClick={handleLogout}
                 className="flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
