@@ -1,8 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Target, BookOpen, TrendingUp, Users, FileText, Briefcase } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'sonner';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const ForEmployee = () => {
+  const [resumeForm, setResumeForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    position: '',
+    experience: '',
+    skills: '',
+    cover_letter: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (e) => {
+    setResumeForm({ ...resumeForm, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // For now, we'll use the contact API to store resume submissions
+      await axios.post(`${API}/contact`, {
+        name: resumeForm.name,
+        email: resumeForm.email,
+        phone: resumeForm.phone,
+        message: `Position: ${resumeForm.position}\nExperience: ${resumeForm.experience}\nSkills: ${resumeForm.skills}\nCover Letter: ${resumeForm.cover_letter}`,
+        contact_type: 'employee'
+      });
+
+      toast.success('Resume submitted successfully! We\'ll review it and get back to you soon.');
+      setResumeForm({
+        name: '',
+        email: '',
+        phone: '',
+        position: '',
+        experience: '',
+        skills: '',
+        cover_letter: ''
+      });
+    } catch (error) {
+      console.error('Error submitting resume:', error);
+      toast.error('Failed to submit resume. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const benefits = [
     {
       icon: Target,
@@ -162,8 +214,148 @@ const ForEmployee = () => {
         </div>
       </section>
 
+      {/* Submit Resume Section */}
+      <section className="section-padding" data-testid="submit-resume-section">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-4xl font-bold text-center mb-4" data-testid="submit-resume-title">
+              Submit Your Resume
+            </h2>
+            <p className="text-center text-gray-600 mb-8">
+              Let us help you find your dream job. Submit your resume and our team will match you with the perfect opportunities.
+            </p>
+            <div className="card p-8">
+              <form onSubmit={handleSubmit} data-testid="resume-form">
+                <div className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium mb-2" htmlFor="name">
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={resumeForm.name}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        data-testid="resume-name-input"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2" htmlFor="email">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={resumeForm.email}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        data-testid="resume-email-input"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium mb-2" htmlFor="phone">
+                        Phone Number *
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={resumeForm.phone}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        data-testid="resume-phone-input"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2" htmlFor="position">
+                        Desired Position *
+                      </label>
+                      <input
+                        type="text"
+                        id="position"
+                        name="position"
+                        value={resumeForm.position}
+                        onChange={handleChange}
+                        required
+                        placeholder="e.g., Software Engineer"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        data-testid="resume-position-input"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2" htmlFor="experience">
+                      Years of Experience *
+                    </label>
+                    <input
+                      type="text"
+                      id="experience"
+                      name="experience"
+                      value={resumeForm.experience}
+                      onChange={handleChange}
+                      required
+                      placeholder="e.g., 5 years"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      data-testid="resume-experience-input"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2" htmlFor="skills">
+                      Key Skills *
+                    </label>
+                    <textarea
+                      id="skills"
+                      name="skills"
+                      value={resumeForm.skills}
+                      onChange={handleChange}
+                      required
+                      rows={3}
+                      placeholder="e.g., JavaScript, React, Node.js, Python"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      data-testid="resume-skills-input"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2" htmlFor="cover_letter">
+                      Cover Letter / Additional Information
+                    </label>
+                    <textarea
+                      id="cover_letter"
+                      name="cover_letter"
+                      value={resumeForm.cover_letter}
+                      onChange={handleChange}
+                      rows={6}
+                      placeholder="Tell us about yourself and what you're looking for..."
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      data-testid="resume-cover-letter-input"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="btn-primary w-full"
+                    data-testid="submit-resume-btn"
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Submit Resume'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Career Tips Section */}
-      <section className="section-padding" data-testid="career-tips-section">
+      <section className="section-padding bg-gray-50" data-testid="career-tips-section">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4" data-testid="tips-title">
             Career Success Tips
@@ -192,7 +384,7 @@ const ForEmployee = () => {
       </section>
 
       {/* Job Types Section */}
-      <section className="section-padding bg-gray-50" data-testid="job-types-section">
+      <section className="section-padding" data-testid="job-types-section">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12" data-testid="job-types-title">
             Types of Opportunities We Offer
@@ -221,50 +413,6 @@ const ForEmployee = () => {
               <p className="text-sm text-gray-600">
                 Try before you commit with conversion opportunities
               </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="section-padding" data-testid="testimonials-section">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12" data-testid="testimonials-title">
-            Success Stories
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="card p-6" data-testid="testimonial-1">
-              <p className="text-gray-600 mb-4 italic">
-                "Tranquil Peeplz helped me land my dream job in just 3 weeks! Their team was supportive and professional throughout."
-              </p>
-              <div className="flex items-center gap-3">
-                <div>
-                  <p className="font-semibold">Jennifer Lee</p>
-                  <p className="text-sm text-gray-500">Marketing Manager</p>
-                </div>
-              </div>
-            </div>
-            <div className="card p-6" data-testid="testimonial-2">
-              <p className="text-gray-600 mb-4 italic">
-                "The career guidance I received was invaluable. They helped me negotiate a 20% salary increase!"
-              </p>
-              <div className="flex items-center gap-3">
-                <div>
-                  <p className="font-semibold">Marcus Williams</p>
-                  <p className="text-sm text-gray-500">Software Engineer</p>
-                </div>
-              </div>
-            </div>
-            <div className="card p-6" data-testid="testimonial-3">
-              <p className="text-gray-600 mb-4 italic">
-                "Professional, responsive, and truly cares about finding the right fit. Highly recommend!"
-              </p>
-              <div className="flex items-center gap-3">
-                <div>
-                  <p className="font-semibold">Sarah Chen</p>
-                  <p className="text-sm text-gray-500">HR Director</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
