@@ -160,43 +160,93 @@ const Navbar = () => {
               <TabsTrigger value="signup" data-testid="signup-tab">Sign Up</TabsTrigger>
             </TabsList>
             <TabsContent value="login" data-testid="login-form">
-              <form onSubmit={handleLogin} className="space-y-4 mt-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2" htmlFor="login-email">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="login-email"
-                    value={loginForm.email}
-                    onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    data-testid="login-email-input"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2" htmlFor="login-password">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    id="login-password"
-                    value={loginForm.password}
-                    onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    data-testid="login-password-input"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="btn-primary w-full"
-                  data-testid="login-submit-btn"
-                >
-                  Login
-                </button>
-              </form>
+              {!showForgotPassword ? (
+                <form onSubmit={handleLogin} className="space-y-4 mt-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2" htmlFor="login-email">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="login-email"
+                      value={loginForm.email}
+                      onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      data-testid="login-email-input"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2" htmlFor="login-password">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      id="login-password"
+                      value={loginForm.password}
+                      onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      data-testid="login-password-input"
+                    />
+                  </div>
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => setShowForgotPassword(true)}
+                      className="text-sm font-medium hover:underline"
+                      style={{ color: '#FF6B35' }}
+                      data-testid="forgot-password-link"
+                    >
+                      Forgot Password?
+                    </button>
+                  </div>
+                  <button
+                    type="submit"
+                    className="btn-primary w-full"
+                    data-testid="login-submit-btn"
+                  >
+                    Login
+                  </button>
+                </form>
+              ) : (
+                <form onSubmit={handleForgotPassword} className="space-y-4 mt-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2" htmlFor="forgot-email">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      id="forgot-email"
+                      value={forgotPasswordEmail}
+                      onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                      required
+                      placeholder="Enter your email address"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      data-testid="forgot-password-email-input"
+                    />
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    We'll send you a link to reset your password.
+                  </p>
+                  <button
+                    type="submit"
+                    className="btn-primary w-full"
+                    data-testid="forgot-password-submit-btn"
+                  >
+                    Send Reset Link
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowForgotPassword(false)}
+                    className="w-full text-sm font-medium hover:underline"
+                    style={{ color: '#FF6B35' }}
+                    data-testid="back-to-login-btn"
+                  >
+                    Back to Login
+                  </button>
+                </form>
+              )}
             </TabsContent>
             <TabsContent value="signup" data-testid="signup-form">
               <form onSubmit={handleSignup} className="space-y-4 mt-4">
