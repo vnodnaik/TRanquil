@@ -348,6 +348,22 @@ const Navbar = () => {
                     data-testid="signup-password-input"
                   />
                 </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2" htmlFor="signup-role">
+                    I am a
+                  </label>
+                  <select
+                    id="signup-role"
+                    value={signupForm.role}
+                    onChange={(e) => setSignupForm({ ...signupForm, role: e.target.value })}
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    data-testid="signup-role-select"
+                  >
+                    <option value="jobseeker">Job Seeker</option>
+                    <option value="employer">Employer</option>
+                  </select>
+                </div>
                 <button
                   type="submit"
                   className="btn-primary w-full"
