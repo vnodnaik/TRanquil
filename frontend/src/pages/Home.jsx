@@ -237,7 +237,7 @@ const Home = () => {
               to understanding both our clients' needs and our candidates' aspirations.
             </p>
             <Link to="/about" data-testid="learn-more-about-btn">
-              <button className=\"btn-primary\">Learn More About Us</button>
+              <button className="btn-primary">Learn More About Us</button>
             </Link>
           </div>
         </div>
