@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, LogIn } from 'lucide-react';
+import { Menu, X, LogIn, User } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { toast } from 'sonner';
@@ -8,7 +9,10 @@ import { toast } from 'sonner';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
   const location = useLocation();
+  const { user, login, signup, logout } = useAuth();
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -22,20 +26,42 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
-  const [signupForm, setSignupForm] = useState({ name: '', email: '', password: '' });
-  const [showForgotPassword, setShowForgotPassword] = useState(false);
-  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
+  const [signupForm, setSignupForm] = useState({ name: '', email: '', password: '', role: 'jobseeker' });
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    toast.success('Login functionality will be implemented soon!');
-    setShowAuthDialog(false);
+    try {
+      const userData = await login(loginForm.email, loginForm.password);
+      toast.success('Login successful!');
+      setShowAuthDialog(false);
+      
+      // Redirect based on role
+      if (userData.role === 'employer') {
+        window.location.href = '/employer-dashboard';
+      } else {
+        window.location.href = '/jobseeker-dashboard';
+      }
+    } catch (error) {
+      toast.error('Login failed. Please check your credentials.');
+    }
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    toast.success('Signup functionality will be implemented soon!');
-    setShowAuthDialog(false);
+    try {
+      const userData = await signup(signupForm.name, signupForm.email, signupForm.password, signupForm.role);
+      toast.success('Account created successfully!');
+      setShowAuthDialog(false);
+      
+      // Redirect based on role
+      if (userData.role === 'employer') {
+        window.location.href = '/employer-dashboard';
+      } else {
+        window.location.href = '/jobseeker-dashboard';
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Signup failed. Please try again.');
+    }
   };
 
   const handleForgotPassword = (e) => {
@@ -43,6 +69,12 @@ const Navbar = () => {
     toast.success(`Password reset link sent to ${forgotPasswordEmail}`);
     setShowForgotPassword(false);
     setForgotPasswordEmail('');
+  };
+
+  const handleLogout = () => {
+    logout();
+    toast.success('Logged out successfully');
+    window.location.href = '/';
   };
 
   return (
