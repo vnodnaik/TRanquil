@@ -62,19 +62,19 @@ const EmployerDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50" data-testid="employer-dashboard">
       {/* Header */}
-      <div className="bg-white shadow">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex justify-between items-center">
+      <div className="bg-white shadow-sm">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
             <div>
-              <h1 className="text-3xl font-bold" style={{ color: '#FF6B35' }}>
+              <h1 className="text-3xl font-bold mb-2" style={{ color: '#FF6B35' }}>
                 Employer Dashboard
               </h1>
-              <p className="text-gray-600 mt-1">Welcome back, {user?.name}!</p>
+              <p className="text-gray-600">Welcome back, {user?.name}!</p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleSwitchRole}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                 data-testid="switch-role-btn"
               >
                 <RefreshCw size={18} />
@@ -82,7 +82,7 @@ const EmployerDashboard = () => {
               </button>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                 data-testid="logout-btn"
               >
                 <LogOut size={18} />
