@@ -64,11 +64,22 @@ const Navbar = () => {
     }
   };
 
-  const handleForgotPassword = (e) => {
+  const handleForgotPassword = async (e) => {
     e.preventDefault();
-    toast.success(`Password reset link sent to ${forgotPasswordEmail}`);
-    setShowForgotPassword(false);
-    setForgotPasswordEmail('');
+    try {
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const API = `${BACKEND_URL}/api`;
+      
+      await axios.post(`${API}/auth/forgot-password`, {
+        email: forgotPasswordEmail
+      });
+      
+      toast.success(`Password reset link sent to ${forgotPasswordEmail}. Please check your email.`);
+      setShowForgotPassword(false);
+      setForgotPasswordEmail('');
+    } catch (error) {
+      toast.error('Failed to send reset link. Please try again.');
+    }
   };
 
   const handleLogout = () => {
