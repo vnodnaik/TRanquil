@@ -23,6 +23,8 @@ const Navbar = () => {
 
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [signupForm, setSignupForm] = useState({ name: '', email: '', password: '' });
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -34,6 +36,13 @@ const Navbar = () => {
     e.preventDefault();
     toast.success('Signup functionality will be implemented soon!');
     setShowAuthDialog(false);
+  };
+
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+    toast.success(`Password reset link sent to ${forgotPasswordEmail}`);
+    setShowForgotPassword(false);
+    setForgotPasswordEmail('');
   };
 
   return (
