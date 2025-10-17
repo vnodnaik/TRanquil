@@ -99,6 +99,13 @@ class ProfileUpdate(BaseModel):
     skills: Optional[str] = None
     bio: Optional[str] = None
 
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
 # Job Models
 class Job(BaseModel):
     model_config = ConfigDict(extra="ignore")
