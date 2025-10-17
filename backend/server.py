@@ -638,6 +638,64 @@ async def get_job_recommendations(current_user: User = Depends(get_current_user)
     
     return jobs
 
+# Admin Routes
+@api_router.get("/admin/stats")
+async def get_admin_stats(admin: User = Depends(get_admin_user)):
+    total_users = await db.users.count_documents({})
+    total_employers = await db.users.count_documents({"role": "employer"})
+    total_jobseekers = await db.users.count_documents({"role": "jobseeker"})
+    total_jobs = await db.jobs.count_documents({})
+    active_jobs = await db.jobs.count_documents({"is_active": True})
+    total_applications = await db.applications.count_documents({})
+    
+    return {
+        "total_users": total_users,
+        "total_employers": total_employers,
+        "total_jobseekers": total_jobseekers,
+        "total_jobs": total_jobs,
+        "active_jobs": active_jobs,
+        "total_applications": total_applications
+    }
+
+@api_router.get("/admin/users")
+async def get_all_users(admin: User = Depends(get_admin_user)):
+    users = await db.users.find({}, {"_id": 0, "password_hash": 0}).to_list(1000)
+    return users
+
+@api_router.get("/admin/jobs")
+async def get_all_jobs_admin(admin: User = Depends(get_admin_user)):
+    jobs = await db.jobs.find({}, {"_id": 0}).to_list(1000)
+    
+    for job in jobs:
+        if isinstance(job['posted_date'], str):
+            job['posted_date'] = datetime.fromisoformat(job['posted_date'])
+    
+    return jobs
+
+@api_router.get("/admin/applications")
+async def get_all_applications_admin(admin: User = Depends(get_admin_user)):
+    applications = await db.applications.find({}, {"_id": 0}).to_list(1000)
+    
+    for app in applications:
+        if isinstance(app['applied_date'], str):
+            app['applied_date'] = datetime.fromisoformat(app['applied_date'])
+    
+    return applications
+
+@api_router.delete("/admin/users/{user_id}")
+async def delete_user(user_id: str, admin: User = Depends(get_admin_user)):
+    result = await db.users.delete_one({"id": user_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"message": "User deleted successfully"}
+
+@api_router.delete("/admin/jobs/{job_id}")
+async def delete_job_admin(job_id: str, admin: User = Depends(get_admin_user)):
+    result = await db.jobs.delete_one({"id": job_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Job not found")
+    return {"message": "Job deleted successfully"}
+
 # Contact Routes
 @api_router.post("/contact", response_model=Contact)
 async def create_contact(input: ContactCreate):
