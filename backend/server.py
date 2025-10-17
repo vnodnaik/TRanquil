@@ -35,6 +35,7 @@ api_router = APIRouter(prefix="/api")
 class UserRole(str, Enum):
     employer = "employer"
     jobseeker = "jobseeker"
+    admin = "admin"
 
 class JobType(str, Enum):
     full_time = "Full-time"
