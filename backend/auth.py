@@ -33,13 +33,13 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def get_password_hash(password: str) -> str:
     try:
-        # Truncate password to 72 bytes if needed (bcrypt limitation)
-        if len(password.encode('utf-8')) > 72:
+        # Truncate password to 72 characters (not bytes) for bcrypt
+        if len(password) > 72:
             password = password[:72]
         return pwd_context.hash(password)
     except Exception as e:
         print(f"Password hashing error: {e}")
-        raise
+        raise HTTPException(status_code=500, detail=f"Password hashing failed: {str(e)}")
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()
