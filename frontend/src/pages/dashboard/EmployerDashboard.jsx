@@ -9,7 +9,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const EmployerDashboard = () => {
-  const { user, token, logout, switchRole } = useAuth();
+  const { user, token, logout } = useAuth();
   const [stats, setStats] = useState({ totalJobs: 0, activeJobs: 0, totalApplications: 0 });
   const [loading, setLoading] = useState(true);
 
