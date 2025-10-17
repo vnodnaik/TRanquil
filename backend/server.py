@@ -292,14 +292,11 @@ async def get_current_user_info(current_user: User = Depends(get_current_user)):
 
 @api_router.put("/auth/switch-role")
 async def switch_role(current_user: User = Depends(get_current_user)):
-    new_role = UserRole.jobseeker if current_user.role == UserRole.employer else UserRole.employer
-    
-    await db.users.update_one(
-        {"id": current_user.id},
-        {"$set": {"role": new_role}}
+    # Role switching disabled - users are locked to their role
+    raise HTTPException(
+        status_code=403, 
+        detail="Role switching is not allowed. Please contact admin if you need to change your role."
     )
-    
-    return {"message": f"Role switched to {new_role}", "new_role": new_role}
 
 @api_router.put("/auth/profile", response_model=UserResponse)
 async def update_profile(profile_data: ProfileUpdate, current_user: User = Depends(get_current_user)):
