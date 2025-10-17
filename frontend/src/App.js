@@ -7,6 +7,8 @@ import ForEmployee from './pages/ForEmployee';
 import JobSearch from './pages/JobSearch';
 import ContactUs from './pages/ContactUs';
 import JobDetails from './pages/JobDetails';
+import Recruitment from './pages/Recruitment';
+import Staffing from './pages/Staffing';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { Toaster } from './components/ui/sonner';
@@ -25,6 +27,8 @@ function App() {
           <Route path="/jobs" element={<JobSearch />} />
           <Route path="/jobs/:jobId" element={<JobDetails />} />
           <Route path="/contact" element={<ContactUs />} />
+          <Route path="/recruitment" element={<Recruitment />} />
+          <Route path="/staffing" element={<Staffing />} />
         </Routes>
         <Footer />
         <Toaster position="top-right" />
