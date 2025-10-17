@@ -223,6 +223,26 @@ const Home = () => {
         </div>
       </section>
 
+      {/* About Us Short Section */}
+      <section className="section-padding" data-testid="about-us-short-section">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-6">
+              About <span style={{ color: '#FF6B35' }}>Tranquil Peeplz</span>
+            </h2>
+            <p className="text-lg text-gray-700 leading-relaxed mb-8">
+              Founded in 2009, Tranquil Peeplz has been a trusted partner in connecting exceptional talent with outstanding opportunities. 
+              With over 15 years of excellence in the recruitment industry, we've successfully placed thousands of candidates in roles 
+              where they thrive and helped countless companies build exceptional teams. Our success stems from our unwavering commitment 
+              to understanding both our clients' needs and our candidates' aspirations.
+            </p>
+            <Link to="/about" data-testid="learn-more-about-btn">
+              <button className=\"btn-primary\">Learn More About Us</button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Industries Section */}
       <section className="section-padding bg-gray-50" data-testid="industries-section">
         <div className="container mx-auto px-4">
