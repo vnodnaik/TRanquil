@@ -15,6 +15,7 @@ from auth import (
     get_password_hash, verify_password, create_access_token,
     decode_access_token, oauth2_scheme, generate_verification_token
 )
+from email_service import send_password_reset_email
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
