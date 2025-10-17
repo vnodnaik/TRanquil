@@ -126,15 +126,6 @@ const ContactUs = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Map Placeholder */}
-              <div className="mt-8 rounded-lg overflow-hidden" data-testid="map-placeholder">
-                <img
-                  src="https://images.unsplash.com/photo-1740933084056-078fac872bff"
-                  alt="Office location"
-                  className="w-full h-64 object-cover"
-                />
-              </div>
             </div>
 
             {/* Contact Form */}
@@ -238,47 +229,6 @@ const ContactUs = () => {
                   </div>
                 </form>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="section-padding bg-gray-50" data-testid="faq-section">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Frequently Asked Questions</h2>
-          <div className="max-w-3xl mx-auto space-y-6">
-            <div className="card p-6" data-testid="faq-1">
-              <h3 className="text-xl font-semibold mb-3" style={{ color: '#FF6B35' }}>
-                How quickly can you fill a position?
-              </h3>
-              <p className="text-gray-700">
-                Typically, we can present qualified candidates within 48-72 hours and fill positions within 2-4 weeks, depending on the role's complexity and requirements.
-              </p>
-            </div>
-            <div className="card p-6" data-testid="faq-2">
-              <h3 className="text-xl font-semibold mb-3" style={{ color: '#FF6B35' }}>
-                What industries do you specialize in?
-              </h3>
-              <p className="text-gray-700">
-                We work across all major industries including Technology, Healthcare, Finance, Manufacturing, Retail, Education, Hospitality, and Construction.
-              </p>
-            </div>
-            <div className="card p-6" data-testid="faq-3">
-              <h3 className="text-xl font-semibold mb-3" style={{ color: '#FF6B35' }}>
-                Is there a fee for job seekers?
-              </h3>
-              <p className="text-gray-700">
-                No, our services are completely free for job seekers. Employers pay for our recruitment services.
-              </p>
-            </div>
-            <div className="card p-6" data-testid="faq-4">
-              <h3 className="text-xl font-semibold mb-3" style={{ color: '#FF6B35' }}>
-                What is your replacement guarantee?
-              </h3>
-              <p className="text-gray-700">
-                We offer a 90-day replacement guarantee. If a placed candidate doesn't work out within the first 90 days, we'll find a replacement at no additional cost.
-              </p>
             </div>
           </div>
         </div>
