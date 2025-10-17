@@ -214,6 +214,15 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
     
     return User(**user)
 
+# Admin only dependency
+async def get_admin_user(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role != UserRole.admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+    return current_user
+
 # Auth Routes
 @api_router.post("/auth/signup", response_model=Token)
 async def signup(user_data: UserSignup):
