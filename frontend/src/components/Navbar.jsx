@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { toast } from 'sonner';
+import axios from 'axios';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
