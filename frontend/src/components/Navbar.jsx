@@ -119,17 +119,41 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
-              <button
-                onClick={() => setShowAuthDialog(true)}
-                data-testid="login-signup-btn"
-                className="ml-4 px-4 py-2 rounded-lg font-medium text-white flex items-center gap-2 transition-colors"
-                style={{ backgroundColor: '#FF6B35' }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = '#E55A2B'}
-                onMouseLeave={(e) => e.target.style.backgroundColor = '#FF6B35'}
-              >
-                <LogIn size={18} />
-                Login / Sign Up
-              </button>
+              
+              {user ? (
+                <div className="flex items-center gap-3 ml-4">
+                  <Link
+                    to={user.role === 'employer' ? '/employer-dashboard' : '/jobseeker-dashboard'}
+                    data-testid="dashboard-link"
+                    className="px-4 py-2 rounded-lg font-medium text-white flex items-center gap-2 transition-colors"
+                    style={{ backgroundColor: '#FF6B35' }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = '#E55A2B'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = '#FF6B35'}
+                  >
+                    <User size={18} />
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    data-testid="logout-nav-btn"
+                    className="px-4 py-2 rounded-lg font-medium bg-gray-200 hover:bg-gray-300 transition-colors"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowAuthDialog(true)}
+                  data-testid="login-signup-btn"
+                  className="ml-4 px-4 py-2 rounded-lg font-medium text-white flex items-center gap-2 transition-colors"
+                  style={{ backgroundColor: '#FF6B35' }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = '#E55A2B'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#FF6B35'}
+                >
+                  <LogIn size={18} />
+                  Login / Sign Up
+                </button>
+              )}
             </div>
 
             {/* Mobile menu button */}
