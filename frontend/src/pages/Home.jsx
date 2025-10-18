@@ -53,8 +53,8 @@ const Home = () => {
         <div className="container mx-auto px-4 relative z-10 text-white">
           <div className="max-w-3xl">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 fade-in-up" data-testid="hero-title">
-              Find Your Perfect Match in{' '}
-              <span style={{ color: '#FF6B35' }}>Recruitment & Staffing</span>
+              Connecting Talent{' '}
+              <span style={{ color: '#FF6B35' }}>With the Tranquility</span>
             </h1>
             <p className="text-lg mb-8 text-gray-200" data-testid="hero-subtitle">
               Connecting exceptional talent with outstanding opportunities. Whether you're hiring or job hunting, we make it seamless.
